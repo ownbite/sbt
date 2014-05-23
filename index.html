@@ -1,1 +1,74 @@
-<h1>Hello World</h1>
+<!DOCTYPE html>
+<html>
+
+<script src="klass.js"></script>
+
+<body>
+
+<canvas id="myCanvas" width="1000" height="700" style="border:1px solid #c3c3c3;">
+</canvas>
+
+<script>
+	
+	LINE_WIDTH = 2;
+
+	var Shape = klass(function (x, y, width, height) {
+		this.height = height;
+		this.width = width;
+		this.x = x;
+		this.y = y;
+	})
+	.methods({
+		
+		set_color: function (color) {
+			this.color = color;
+		},
+
+		draw: function(ctx) {
+			ctx.beginPath(); 
+   			ctx.rect(this.x, this.y, this.width, this.height);
+   			ctx.fillStyle = this.color;
+   			ctx.fill()
+   		}
+	})
+
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.scale(0.2, 0.2)
+
+	var sandbox = new Shape(1500, 1000, 2200, 1400);
+	sandbox.set_color("#FFE401");
+	sandbox.draw(ctx);
+
+	var box1 = new Shape(1900, 900, 200, 100);
+	box1.set_color("#C7D6D6");
+	box1.draw(ctx);
+
+	var box2 = new Shape(3100, 900, 200, 100);
+	box2.set_color("#C7D6D6");
+	box2.draw(ctx);
+
+
+    // Reklampåse vågrätt
+    for (i=0; i < 9; i++) {
+    	for (y=0; y < 2; y++) {
+    		add_bag = new Shape(1550 + (235*i),990 + (1400*y),225,20);
+    		add_bag.set_color("#22AC38");
+    		add_bag.draw(ctx);
+		}
+    }
+
+    // Reklampåse lodrätt
+    for (i=0; i < 2; i++) {
+    	for (y=0; y < 6; y++) {
+    		add_bag = new Shape(1500 + (2200*i), 1000 + (235*y), 20, 225);
+    		add_bag.set_color("#22AC38");
+    		add_bag.draw(ctx);
+		}
+    }
+
+
+</script>
+
+</body>
+</html>
