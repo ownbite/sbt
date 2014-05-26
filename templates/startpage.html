@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<canvas id="myCanvas" width="1000" height="700" style="border:1px solid #c3c3c3;">
+</canvas>
+
+{{ data }}
+
+<script>
+	
+	// DATADEFINITIONS
+	
+	// Posn is {"x":Integer, "y":integer}
+	// interp. the x and y coordinates of a point on the screen
+	
+	P0 = {"x" : 3, "y" : 8}
+	P1 = {"x" : 0, "y" : 8}
+
+	// function fn_for_posn(p){
+	// 	return ...p["x"] ...p["y"]
+	// }
+
+
+	// CONSTANTS
+	SANDBOX_X = 1500;
+	SANDBOX_Y = 1000;
+	SANDBOX_WIDTH = 2200;
+	SANDBOX_HEIGTH = 1400;
+
+
+	COLOR_AVAILABLE = "#22AC38";
+	COLOR_OCCUPIED = "#AD2E11";
+	LINE_WIDTH = 2;
+	POSITIONS = [{"position": "1", "__rowid__": "cokwr", "företag": null}, {"position": "2", "__rowid__": "cpzh4", "företag": null}, {"position": "3", "__rowid__": "cre1l", "företag": null}, {"position": "4", "__rowid__": "chk2m", "företag": "Willssons Korv och Son"}, {"position": "5", "__rowid__": "ciyn3", "företag": "Sogeti"}, {"position": "6", "__rowid__": "ckd7g", "företag": null}, {"position": "7", "__rowid__": "clrrx", "företag": null}, {"position": "8", "__rowid__": "cyevm", "företag": null}, {"position": "9", "__rowid__": "cztg3", "företag": null}, {"position": "10", "__rowid__": "d180g", "företag": null}, {"position": "11", "__rowid__": "d2mkx", "företag": null}, {"position": "12", "__rowid__": "cssly", "företag": null}, {"position": "13", "__rowid__": "cu76f", "företag": null}, {"position": "14", "__rowid__": "cvlqs", "företag": null}, {"position": "15", "__rowid__": "cx0b9", "företag": null}, {"position": "16", "__rowid__": "d9ney", "företag": null}, {"position": "17", "__rowid__": "db1zf", "företag": null}, {"position": "18", "_ciyn3": "Storlek", "__rowid__": "dcgjs", "företag": "Sogeti", "_ckd7g": "225 x 80"}, {"position": "19", "__rowid__": "ddv49", "företag": null}, {"position": "20", "__rowid__": "d415a", "företag": null}, {"position": "21", "__rowid__": "d5fpr", "företag": null}, {"position": "22", "__rowid__": "d6ua4", "företag": null}, {"position": "23", "__rowid__": "d88ul", "företag": null}, {"position": "24", "__rowid__": "dkvya", "företag": null}, {"position": "25", "__rowid__": "dmair", "företag": null}, {"position": "26", "__rowid__": "dnp34", "företag": null}, {"position": "27", "__rowid__": "dp3nl", "företag": null}, {"position": "28", "__rowid__": "df9om", "företag": null}, {"position": "29", "__rowid__": "dgo93", "företag": null}];
+
+
+	function get_addbags() {
+		return POSITIONS;
+	}
+
+	var Shape = klass(function (x, y, width, height) {
+		this.height = height;
+		this.width = width;
+		this.x = x;
+		this.y = y;
+	})
+	.methods({
+		
+		set_color: function (color) {
+			this.color = color;
+		},
+
+		draw: function(ctx) {
+			ctx.beginPath(); 
+   			ctx.rect(this.x, this.y, this.width, this.height);
+   			ctx.fillStyle = this.color;
+   			ctx.fill();
+   		}
+	})
+
+	var Addv = Shape.extend(function (x, y, width, height, company, id) {
+		// super class is automagically called
+		this.ownd_by = company
+		this.id = id
+	})
+  	.methods({
+
+    	is_available: function() {
+     		if (this.ownd_by == null) 
+     			return true;
+     		else
+     			return false;
+    	},
+
+    	draw: function(ctx) {
+    		
+			ctx.beginPath(); 
+   			ctx.rect(this.x, this.y, this.width, this.height);
+   			
+   			if ( this.is_available() )  
+   				ctx.fillStyle = COLOR_AVAILABLE;
+   			else
+   				ctx.fillStyle = COLOR_OCCUPIED;
+
+   			ctx.fill()
+   		}
+
+  	})
+
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.scale(0.2, 0.2)
+
+	var sandbox = new Shape(SANDBOX_X, SANDBOX_Y, SANDBOX_WIDTH, SANDBOX_HEIGTH);
+	sandbox.set_color("#FFE401");
+	sandbox.draw(ctx);
+
+	var box1 = new Shape(1900, 900, 200, 100);
+	box1.set_color("#C7D6D6");
+	box1.draw(ctx);
+
+	var box2 = new Shape(3100, 900, 200, 100);
+	box2.set_color("#C7D6D6");
+	box2.draw(ctx);
+
+
+	pos_id = 0;
+	arr_adver = []
+
+	// Reklampåse vågrätt
+    for (i=0; i < 9; i++) {
+    	alert( POSITIONS[pos_id]["företag"])
+    	addv = new Addv(SANDBOX_X + (235*i), SANDBOX_Y, 225, 20, POSITIONS[pos_id]["företag"], POSITIONS[pos_id]["position"]);
+    	addv.draw(ctx);
+    	pos_id++;
+    }
+
+    for (i=0; i < 6; i++) {
+    	alert( POSITIONS[pos_id]["företag"])
+    	addv = new Addv(SANDBOX_X + SANDBOX_WIDTH, SANDBOX_Y + (235*i), 20, 225, POSITIONS[pos_id]["företag"], POSITIONS[pos_id]["position"]);
+    	addv.draw(ctx);
+    	pos_id++;
+    }
+
+    for (i=9; i > 0; i--) {
+    	alert( POSITIONS[pos_id]["företag"])
+    	addv = new Addv(SANDBOX_X + SANDBOX_WIDTH - (235*i), SANDBOX_Y + SANDBOX_HEIGTH, 225, 20, POSITIONS[pos_id]["företag"], POSITIONS[pos_id]["position"]);
+    	addv.draw(ctx);
+    	pos_id++;
+    }
+
+    for (i=6; i > 0; i--) {
+    	alert( POSITIONS[pos_id]["företag"])
+    	addv = new Addv(SANDBOX_X, SANDBOX_Y + SANDBOX_HEIGTH - (235*i), 20, 225, POSITIONS[pos_id]["företag"], POSITIONS[pos_id]["position"]);
+    	addv.draw(ctx);
+    	pos_id++;
+    }
+
+
+  //   	for (y=0; y < 2; y++) {
+    		
+
+  //   		add_bag = new Shape(1550 + (235*i),990 + (1400*y),225,20);
+  //   		add_bag.set_color("#22AC38");
+  //   		add_bag.draw(ctx);
+		// }
+  //   }
+
+  //   // Reklampåse lodrätt
+  //   for (i=0; i < 2; i++) {
+  //   	for (y=0; y < 6; y++) {
+  //   		add_bag = new Shape(1500 + (2200*i), 1000 + (235*y), 20, 225);
+  //   		add_bag.set_color("#22AC38");
+  //   		add_bag.draw(ctx);
+		// }
+  //   }
+    
+
+
+
+ 	// Integer -> Posn
+ 	// produce the position of a add_bag around the sandbox, depending on the given number
+ 	function get_addbag_position(number) {
+		
+ 	}
+
+	get_addbags().forEach(function(entry) {});
+
+
+
+	entry.position
+
+
+		// Addv = new Addv(0, 0, 0, 0, entry.företag, entry.position);
+	
+
+
+
+    
+
+
+</script>
+
+{% endblock %}
